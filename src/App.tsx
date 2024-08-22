@@ -1,4 +1,3 @@
-import * as Popover from '@radix-ui/react-popover';
 import { useMemo, useState } from 'react';
 import { LuGem } from 'react-icons/lu';
 import './App.css';
@@ -7,17 +6,18 @@ import { Board } from './game/Board';
 import { CellColor } from './game/Cell';
 import { Player } from './game/Player';
 
-const COUNT_PLAYERS = 6;
+const COUNT_PLAYERS = 3;
 
 function App() {
+  const [countPlayers, setCountPlayers] = useState(COUNT_PLAYERS);
 
   const players = useMemo(() => {
     const players: Player[] = [];
-    for (let i = 0; i < COUNT_PLAYERS; i++) {
+    for (let i = 0; i < countPlayers; i++) {
       players.push(new Player(`Player ${i + 1}`));
     }
     return players;
-  }, []);
+  }, [countPlayers]);
 
   const game = useMemo(() => new Board(players), [players]);
 
@@ -26,7 +26,7 @@ function App() {
   const handleCellClick = (row: number, col: number, color: CellColor) => {
     players[nextPlayer].makeMove(row, col, color);
 
-    setNextPlayer((previousPlayerIndex) => previousPlayerIndex + 1 === COUNT_PLAYERS ? 0 : previousPlayerIndex + 1);
+    setNextPlayer((previousPlayerIndex) => previousPlayerIndex + 1 === countPlayers ? 0 : previousPlayerIndex + 1);
   }
 
   return (
@@ -34,6 +34,13 @@ function App() {
       <h1>
         Stratagèmes - tour {game.turn}
       </h1>
+      <div>
+        <label>Nombre de joueurs</label>
+        <div>
+          <input type="range" min="2" max="6" value={countPlayers} onChange={(e) => setCountPlayers(parseInt(e.target.value))} />
+          <span>{countPlayers}</span>
+        </div>
+      </div>
       <div>
         <p>Au tour du joueur {players[nextPlayer].getName()}</p>
         <p>Gème secrète:
@@ -55,27 +62,27 @@ function App() {
         onCellClick={handleCellClick}
         board={game} />
       <div>
-        <Popover.Root>
-          <Popover.Trigger>
-            Debug joueurs
-          </Popover.Trigger>
-          <Popover.Content>
-            {players.map((player, i) => (
-              <div key={i}>
-                {player.getName()}
-                <ul>
-                  <li>Gèmes: {player.handStones.join(', ')}</li>
-                  <li>Rouge: {player.hasRedStone() ? 'oui' : 'non'}</li>
-                  <li>Bleu: {player.hasBlueStone() ? 'oui' : 'non'}</li>
-                  <li>Verte: {player.hasGreenStone() ? 'oui' : 'non'}</li>
-                </ul>
-              </div>
-            ))}
-          </Popover.Content>
-        </Popover.Root>
       </div>
     </>
   )
 }
+        // <Popover.Root>
+        //   <Popover.Trigger>
+        //     Debug joueurs
+        //   </Popover.Trigger>
+        //   <Popover.Content>
+        //     {players.map((player, i) => (
+        //       <div key={i}>
+        //         {player.getName()}
+        //         <ul>
+        //           <li>Gèmes: {player.handStones.join(', ')}</li>
+        //           <li>Rouge: {player.hasRedStone() ? 'oui' : 'non'}</li>
+        //           <li>Bleu: {player.hasBlueStone() ? 'oui' : 'non'}</li>
+        //           <li>Verte: {player.hasGreenStone() ? 'oui' : 'non'}</li>
+        //         </ul>
+        //       </div>
+        //     ))}
+        //   </Popover.Content>
+        // </Popover.Root>
 
 export default App
