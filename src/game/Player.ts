@@ -53,17 +53,17 @@ export class Player {
         return this.name;
     }
 
-    makeMove(row: number, col: number, color: CellColor): void {
+    makeMove(row: number, col: number, color: CellColor): boolean {
         const surroundingColors = this.board.getSurroundingColors(row, col);
 
         if (this.board.turn === 0) {
             if (row !== this.board.getCenter()!.getRow() || col !== this.board.getCenter()!.getCol()) {
                 console.log('Invalid move, you must place your piece in the center on the first move');
-                return;
+                return false;
             }
         } else if (!surroundingColors.some(color => color !== CellColor.Empty)) {
             console.log('Invalid move, no cell next to you');
-            return
+          return false;
         }
 
         this.board.getCell(row, col)?.setColor(color);
@@ -79,13 +79,12 @@ export class Player {
         const capturedStones = this.board.captureCells(row, col, color);
         this.stoneWons.push(...capturedStones);
 
-        this.checkWinCondition();
+        return this.checkWinCondition();
     }
 
-    checkWinCondition(): void {
+    checkWinCondition(): boolean {
         if (this.board.checkWinCondition()) {
-          console.log(`${this.name} wins!`);
-            return;
+            return true;
         }
 
         // If 5 stone of the same color are captured, the player wins
@@ -96,13 +95,12 @@ export class Player {
 
         for (const color in countStones) {
             if (countStones[color] >= 5) {
-                console.log(`${this.name} wins!`);
-                return;
+                return true;
             }
         }
 
 
-        console.log('Next player');
+        return false;
     }
 
     printCurrentStones(): void {

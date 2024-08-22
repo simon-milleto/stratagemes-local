@@ -10,6 +10,7 @@ const COUNT_PLAYERS = 3;
 
 function App() {
   const [countPlayers, setCountPlayers] = useState(COUNT_PLAYERS);
+  const [winnerPlayer, setWinnerPlayer] = useState<Player | null>(null);
 
   const players = useMemo(() => {
     const players: Player[] = [];
@@ -24,9 +25,12 @@ function App() {
   const [nextPlayer, setNextPlayer] = useState(0);
 
   const handleCellClick = (row: number, col: number, color: CellColor) => {
-    players[nextPlayer].makeMove(row, col, color);
-
-    setNextPlayer((previousPlayerIndex) => previousPlayerIndex + 1 === countPlayers ? 0 : previousPlayerIndex + 1);
+    const isWinner = players[nextPlayer].makeMove(row, col, color);
+    if (isWinner) {
+      setWinnerPlayer(players[nextPlayer]);
+    } else {
+      setNextPlayer((previousPlayerIndex) => previousPlayerIndex + 1 === countPlayers ? 0 : previousPlayerIndex + 1);
+    }
   }
 
   return (
@@ -42,7 +46,11 @@ function App() {
         </div>
       </div>
       <div>
-        <p>Au tour du joueur {players[nextPlayer].getName()}</p>
+          {winnerPlayer !== null ? (
+            <p>Le joueur {winnerPlayer.getName()} a gagné !</p>
+          ) : (
+            <p>Au tour du joueur {players[nextPlayer].getName()}</p>
+          )}
         <p>Gème secrète:
           <span className={`cell-${players[nextPlayer].hiddenWinningColor?.toLowerCase()}`}>
             <LuGem />
