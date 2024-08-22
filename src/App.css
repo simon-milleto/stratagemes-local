@@ -1,0 +1,135 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+
+  --green-stone: #168713;
+  --red-stone: #D32319;
+  --blue-stone: #0744FF;
+  --yellow-stone: #FFD604;
+  --black-stone: #292929;
+  --white-stone: #708090;
+  --board-size: 5;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(var(--board-size), 40px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  width: fit-content;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.cell {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6em;
+
+  font-weight: 500;
+  font-family: inherit;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.cell:not([disabled]):before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  border: 2px solid transparent;
+  transition: all 0.300s ease-in-out;
+}
+
+.cell:not([disabled])[data-state="open"]:before,
+.cell:not([disabled]):hover:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #708090;
+}
+
+.cell-green {
+  color: var(--green-stone);
+}
+
+.cell-blue {
+  color: var(--blue-stone);
+}
+
+.cell-red {
+  color: var(--red-stone);
+}
+
+.cell-yellow {
+  color: var(--yellow-stone);
+}
+
+.cell-white {
+  color: var(--white-stone);
+}
+
+.cell-black {
+  color: var(--black-stone);
+}
+
+.hand-stones {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+}
+
+[data-radix-popper-content-wrapper] {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  padding: 8px;
+  z-index: 1 !important;
+}
+
+.color-btn {
+  width: 20px;
+  height: 20px;
+}
+
+.choose-green {
+  background-color: var(--green-stone);
+}
+
+.choose-blue {
+  background-color: var(--blue-stone);
+}
+
+.choose-red {
+  background-color: var(--red-stone);
+}
+
+.choose-yellow {
+  background-color: var(--yellow-stone);
+}
+
+.choose-white {
+  background-color: var(--white-stone);
+}
+
+.choose-black {
+  background-color: var(--black-stone);
+}
